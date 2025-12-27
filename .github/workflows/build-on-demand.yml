@@ -31,29 +31,22 @@ jobs:
         python -m PyInstaller --name DrumSepGUI --onefile --noconsole --hidden-import PySide6.QtCore --hidden-import PySide6.QtGui --hidden-import PySide6.QtWidgets --collect-all PySide6 --paths . app/main.py
       continue-on-error: false
     
+    - name: Verify executable exists
+      run: |
+        if (Test-Path "dist\DrumSepGUI.exe") {
+          Write-Host "✅ Executable created successfully"
+          Get-Item "dist\DrumSepGUI.exe" | Select-Object Name, Length
+        } else {
+          Write-Host "❌ Executable not found!"
+          Get-ChildItem dist\ -ErrorAction SilentlyContinue
+          exit 1
+        }
+    
     - name: Upload executable
       uses: actions/upload-artifact@v4
       with:
         name: DrumSepGUI-Windows
         path: dist/DrumSepGUI.exe
         retention-days: 90
-    
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v1.0.0-build
-        name: DrumSep GUI Windows Build
-        body: |
-          ## Windows Executable Build
-          
-          This is an automated build of DrumSep GUI for Windows.
-          
-          **Download `DrumSepGUI.exe` below and run it!**
-          
-          No installation needed - just download and double-click.
-        files: dist/DrumSepGUI.exe
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      if: success()
 
