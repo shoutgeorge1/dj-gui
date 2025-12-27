@@ -16,9 +16,11 @@ DrumSep GUI is a graphical interface for the [drumsep](https://github.com/inagoy
 ### 📥 Download the Executable
 
 **Get the latest release:**
-- **GitHub Releases**: https://github.com/shoutgeorge1/dj-gui/releases
-- Download `DrumSepGUI-Setup.exe` (Windows installer)
+- **👉 [Download from GitHub Releases](https://github.com/shoutgeorge1/dj-gui/releases/latest)**
+- Download `DrumSepGUI-Setup.exe` (Windows installer - recommended)
 - Or `DrumSepGUI.exe` (portable version)
+
+> **For developers**: See [RELEASE_GUIDE.md](RELEASE_GUIDE.md) to create new releases
 
 ### Option 1: Installer (Recommended)
 
