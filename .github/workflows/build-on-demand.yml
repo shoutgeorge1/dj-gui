@@ -25,12 +25,21 @@ jobs:
       run: |
         git clone https://github.com/inagoy/drumsep
         cd drumsep
-        bash drumsepInstall
+        # Install demucs (drumsep dependency)
+        pip install demucs
+        # Download model if needed
+        if (-not (Test-Path "model")) {
+          New-Item -ItemType Directory -Path "model"
+          pip install gdown
+          python -c "import gdown; gdown.download('https://drive.google.com/uc?id=1-Dm666ScPkg8Gt2-lK3Ua0xOudWHZBGC', 'model/49469ca8.th', quiet=False)"
+        }
         cd ..
+      shell: pwsh
     
     - name: Build executable
       run: |
         pyinstaller packaging/drumsep_gui.spec --clean --noconfirm
+      continue-on-error: false
     
     - name: Upload executable
       uses: actions/upload-artifact@v4
