@@ -28,7 +28,7 @@ jobs:
     
     - name: Build executable
       run: |
-        pyinstaller --name DrumSepGUI --onefile --windowed --hidden-import PySide6.QtCore --hidden-import PySide6.QtGui --hidden-import PySide6.QtWidgets --collect-all PySide6 app/main.py
+        python -m PyInstaller --name DrumSepGUI --onefile --noconsole --hidden-import PySide6.QtCore --hidden-import PySide6.QtGui --hidden-import PySide6.QtWidgets --collect-all PySide6 --paths . app/main.py
       continue-on-error: false
     
     - name: Upload executable
