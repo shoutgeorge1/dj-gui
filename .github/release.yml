@@ -1,0 +1,13 @@
+# GitHub Release Template
+# This file helps format your releases
+
+name: Release Template
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  # This is just a template - actual automation would go here
+  # For now, create releases manually using the guide in RELEASE_GUIDE.md
+
