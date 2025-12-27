@@ -43,8 +43,14 @@ desktop.ini
 *.spec.bak
 *.iss.bak
 
-# Build artifacts
-*.exe
+# Build artifacts (exclude from dist/build, but allow in releases/)
+dist/
+build/
 *.msi
 *.dmg
+# Allow executables in releases/ folder
+!releases/
+!releases/**/*.exe
+
+
 
