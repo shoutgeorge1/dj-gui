@@ -1,0 +1,60 @@
+name: Build Windows EXE on Demand
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    
+    - name: Install drumsep
+      run: |
+        git clone https://github.com/inagoy/drumsep
+        cd drumsep
+        bash drumsepInstall
+        cd ..
+    
+    - name: Build executable
+      run: |
+        pyinstaller packaging/drumsep_gui.spec --clean --noconfirm
+    
+    - name: Upload executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: DrumSepGUI-Windows
+        path: dist/DrumSepGUI.exe
+        retention-days: 90
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v1.0.0-build
+        name: DrumSep GUI Windows Build
+        body: |
+          ## Windows Executable Build
+          
+          This is an automated build of DrumSep GUI for Windows.
+          
+          **Download `DrumSepGUI.exe` below and run it!**
+          
+          No installation needed - just download and double-click.
+        files: dist/DrumSepGUI.exe
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

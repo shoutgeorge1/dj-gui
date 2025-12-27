@@ -1,0 +1,67 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  release:
+    types: [ created ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    
+    - name: Install drumsep
+      run: |
+        git clone https://github.com/inagoy/drumsep
+        cd drumsep
+        bash drumsepInstall
+        cd ..
+    
+    - name: Build executable
+      run: |
+        pyinstaller packaging/drumsep_gui.spec --clean --noconfirm
+    
+    - name: Build installer (if Inno Setup available)
+      run: |
+        $innoPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+        if (Test-Path $innoPath) {
+          & $innoPath packaging\drumsep_gui.iss
+        } else {
+          Write-Host "Inno Setup not found, skipping installer build"
+        }
+      continue-on-error: true
+    
+    - name: Upload executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-executable
+        path: |
+          dist/DrumSepGUI.exe
+          dist/DrumSepGUI-Setup.exe
+        retention-days: 30
+    
+    - name: Create Release Asset
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/DrumSepGUI.exe
+          dist/DrumSepGUI-Setup.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
