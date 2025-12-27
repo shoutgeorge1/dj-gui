@@ -1,4 +1,4 @@
-name: Build Windows EXE on Demand
+name: Build Windows EXE
 
 on:
   workflow_dispatch:
@@ -21,32 +21,24 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
     
-    - name: Install drumsep dependencies
-      run: |
-        pip install demucs
-        pip install gdown
-    
     - name: Build executable
       run: |
-        python -m PyInstaller --name DrumSepGUI --onefile --noconsole --hidden-import PySide6.QtCore --hidden-import PySide6.QtGui --hidden-import PySide6.QtWidgets --collect-all PySide6 --paths . app/main.py
-      continue-on-error: false
+        python -m PyInstaller --name DrumSepGUI --onefile --noconsole --hidden-import PySide6.QtCore --hidden-import PySide6.QtGui --hidden-import PySide6.QtWidgets --collect-all PySide6 app/main.py
     
-    - name: Verify executable exists
+    - name: Verify and upload
       run: |
         if (Test-Path "dist\DrumSepGUI.exe") {
-          Write-Host "✅ Executable created successfully"
-          Get-Item "dist\DrumSepGUI.exe" | Select-Object Name, Length
+          Write-Host "✅ Build successful - executable size:"
+          (Get-Item "dist\DrumSepGUI.exe").Length / 1MB
         } else {
-          Write-Host "❌ Executable not found!"
-          Get-ChildItem dist\ -ErrorAction SilentlyContinue
+          Write-Host "❌ Build failed - executable not found"
           exit 1
         }
     
-    - name: Upload executable
+    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: DrumSepGUI-Windows
         path: dist/DrumSepGUI.exe
         retention-days: 90
-      if: success()
 
