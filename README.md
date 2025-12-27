@@ -13,19 +13,28 @@ DrumSep GUI is a graphical interface for the [drumsep](https://github.com/inagoy
 
 ## Installation
 
+### 📥 Download the Executable
+
+**Get the latest release:**
+- **GitHub Releases**: https://github.com/shoutgeorge1/dj-gui/releases
+- Download `DrumSepGUI-Setup.exe` (Windows installer)
+- Or `DrumSepGUI.exe` (portable version)
+
 ### Option 1: Installer (Recommended)
 
-1. Download `DrumSepGUI-Setup.exe`
+1. Download `DrumSepGUI-Setup.exe` from [Releases](https://github.com/shoutgeorge1/dj-gui/releases)
 2. Double-click to run the installer
 3. Follow the installation wizard
 4. Launch "DrumSep GUI" from your Start menu
 
 ### Option 2: Portable Version
 
-1. Download and extract `DrumSepGUI-Portable.zip`
-2. Double-click `DrumSepGUI.exe` to run
+1. Download `DrumSepGUI.exe` from [Releases](https://github.com/shoutgeorge1/dj-gui/releases)
+2. Double-click to run (no installation needed)
 
 **No Python installation required!** Everything is bundled.
+
+> **Note**: If you don't see a release yet, you'll need to build it yourself (see [BUILD_AND_RELEASE.md](BUILD_AND_RELEASE.md))
 
 ## How to Use
 
@@ -86,13 +95,37 @@ The first time you run DrumSep GUI, it will download the AI models (about 1-2 GB
 
 DrumSep GUI is a thin wrapper around the [drumsep](https://github.com/inagoy/drumsep) CLI tool. It doesn't modify any audio processing logic - it just makes it easier to use.
 
+## Building from Source
+
+If you want to build the executable yourself:
+
+**Windows:**
+```powershell
+.\scripts\build_exe.ps1
+.\scripts\build_installer.ps1
+```
+
+**macOS:**
+```bash
+pyinstaller packaging/drumsep_gui.spec
+```
+
+See [BUILD_AND_RELEASE.md](BUILD_AND_RELEASE.md) for detailed instructions.
+
 ## Support
 
 For issues related to:
-- **DrumSep GUI**: Check this repository
+- **DrumSep GUI**: Check this repository or open an issue
 - **Audio separation quality**: See the [drumsep repository](https://github.com/inagoy/drumsep)
+
+## Downloads
+
+- **Latest Release**: https://github.com/shoutgeorge1/dj-gui/releases
+- **Source Code**: Clone this repository
 
 ## License
 
 This GUI wrapper is provided as-is. Please refer to the drumsep repository for its license terms.
+
+
 
